@@ -6,24 +6,36 @@ const resizer = document.getElementsByClassName('gutter');
 const leftSide = resizer[0].previousElementSibling;
 const rightSide = resizer[0].nextElementSibling;
 
+
 // The current position of mouse
 let x = 0;
 let y = 0;
 
 // Width of left side
 let leftWidth = 0;
+let topHeight = 0;
 
 //마우스 드래그시 작동
 const mouseMoveHandler = function (e) {
+    let innerWidth = window.innerWidth;
     // How far the mouse has been moved
     const dx = e.clientX - x;
     const dy = e.clientY - y;
-
-    const newLeftWidth = (leftWidth + dx) * 100 / resizer[0].parentNode.getBoundingClientRect().width;
-    /*재생플레이어 최소 너비는 전체화면의 10% 이상 90미만으로 제한*/
-    if (newLeftWidth >= 10 && newLeftWidth < 90) {
-        leftSide.style.width = `${newLeftWidth}%`;
-        rightSide.style.width = `${100 - newLeftWidth}%`;
+    //모바일화면(768px이하)일때와 아닐 때 구분
+    if (innerWidth > 768) {
+        const newLeftWidth = (leftWidth + dx) * 100 / resizer[0].parentNode.getBoundingClientRect().width;
+        /*재생플레이어 최소 너비는 전체화면의 10% 이상 90미만으로 제한*/
+        if (newLeftWidth >= 10 && newLeftWidth < 90) {
+            leftSide.style.width = `${newLeftWidth}%`;
+            rightSide.style.width = `${100 - newLeftWidth}%`;
+        }
+    } else {
+        const newTopHeight = (topHeight + dy) * 100 / resizer[0].parentNode.getBoundingClientRect().height;
+        /*재생플레이어 최소 높이는 전체화면의 10% 이상 90미만으로 제한*/
+        if (newTopHeight >= 20 && newTopHeight < 80) {
+            leftSide.style.height = `${newTopHeight}%`;
+            rightSide.style.height = `${100 - newTopHeight}%`;
+        }
     }
     /*console.error("움직일때너비",newLeftWidth);*/
 
@@ -56,6 +68,7 @@ const mouseDownHandler = function (e) {
     x = e.clientX;
     y = e.clientY;
     leftWidth = leftSide.getBoundingClientRect().width;
+    topHeight = leftSide.getBoundingClientRect().height;
     /*console.error("클릭시너비",leftWidth);*/
     // Attach the listeners to `document`
     document.addEventListener('mousemove', mouseMoveHandler);
@@ -63,3 +76,14 @@ const mouseDownHandler = function (e) {
 };
 // Attach the handler
 resizer[0].addEventListener('mousedown', mouseDownHandler);
+//데스크탑,모바일 화면을 전환할때마다 각 조정 후 화면 크기  고정되는 문제로 초기화
+window.onresize = function (event) {
+    var innerWidth = window.innerWidth;
+    if (innerWidth > "768") {
+        leftSide.style.height = "100%";
+        rightSide.style.height = "100%";
+    } else {
+        leftSide.style.width = "100%";
+        rightSide.style.width = "100%";
+    }
+}
