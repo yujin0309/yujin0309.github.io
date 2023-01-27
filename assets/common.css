@@ -1,13 +1,22 @@
 html, body {
+    display: inline-flex;
+    width: 100%;
     height: 100%;
 }
+
 .wrapper {
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
 }
-
+.h10 {
+    height:5%;
+}
 .wrapper #view {
+    width:75%;
+    display: flex;
+    flex-direction: column;
 
 }
 .wrapper #view iframe {
@@ -16,6 +25,7 @@ html, body {
 }
 
 .wrapper #chat {
+    width: 25%;
 }
 
 .gutter {
@@ -30,6 +40,7 @@ html, body {
 }
 
 .gutter.gutter-horizontal {
+    width: 10px;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
 }
 
@@ -49,6 +60,43 @@ html, body {
     overflow-y: auto;
     overflow-x: hidden;
 }
+@media (max-width:768px) {
+    .wrapper{
+        flex: 0 1 auto;
+        flex-direction: column;
+    }
+    .h10{
+        height: 1px;
+    }
+    .gutter.gutter-horizontal{
+        width: 100%;
+        height: 1px;
+    }
+    .wrapper #view{
+        width: 100%;
+        height: 50%;
+    }
+    .wrapper #chat{
+        width: 100%;
+        height: 50%;
+    }
+    .hp-body, 
+    .player-section,
+    .container{
+        height:100% ;
+    }
+    #player-container{
+        height: 90%;
+    }
+    #player{
+        height: 100%;
+    }
+    #player-form{
+        margin-top: 2px;
+        height: 10%;
+    }
+}
 ×
 Drag and Drop
 The image will be downloaded
+
