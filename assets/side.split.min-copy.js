@@ -31,7 +31,7 @@ const mouseMoveHandler = function (e) {
         }
     } else {
         const newTopHeight = (topHeight + dy) * 100 / resizer[0].parentNode.getBoundingClientRect().height;
-        /*재생플레이어 최소 높이는 전체화면의 10% 이상 90미만으로 제한*/
+        /*재생플레이어 최소 높이는 전체화면의 20% 이상 80미만으로 제한*/
         if (newTopHeight >= 20 && newTopHeight < 80) {
             leftSide.style.height = `${newTopHeight}%`;
             rightSide.style.height = `${100 - newTopHeight}%`;
@@ -76,7 +76,7 @@ const mouseDownHandler = function (e) {
 };
 // Attach the handler
 resizer[0].addEventListener('mousedown', mouseDownHandler);
-//데스크탑,모바일 화면을 전환할때마다 각 조정 후 화면 크기  고정되는 문제로 초기화
+//데스크탑,모바일 화면을 전환할때마다 각 조정 후 화면 크기  고정되는 문제로 매순간 마다 화면 초기화
 window.onresize = function (event) {
     var innerWidth = window.innerWidth;
     if (innerWidth > "768") {
