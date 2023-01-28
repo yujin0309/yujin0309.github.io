@@ -93,21 +93,22 @@ html, body {
     }
     #player-container{
         width: 100%;
-        height: 90%;
+        height: 95%;
     }
     #player{
         width: 100%;        
         height: 100%;
     }
     #player-form{
-        margin-top: 2px;
-        height: 10%;
+        display: none;
     }
-    .dropdownBtn{
-        display:none;
-        background-color: blue;
+    .dropdownBtn {
+        display:block;
+        margin: auto;
+        background-color: rgb(255, 230, 0);
         width: 100%;
-        height: 12px;
+        height: 4%;
+        border: 0px;
     }
 }
 ×

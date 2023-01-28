@@ -1,4 +1,3 @@
-"use strict";
 /*화면의 verticalBar를 마우스로 드래그해서 
 /*재생플레이어와 챗창의 화면너비 비율을 조절하는 자바스크립트 코드*/
 // Query the element
@@ -6,6 +5,8 @@ const resizer = document.getElementsByClassName('gutter');
 const leftSide = resizer[0].previousElementSibling;
 const rightSide = resizer[0].nextElementSibling;
 
+let isMobileCheck = isMobile();
+console.log(isMobileCheck);
 
 // The current position of mouse
 let x = 0;
@@ -18,9 +19,17 @@ let topHeight = 0;
 //마우스 드래그시 작동
 const mouseMoveHandler = function (e) {
     let innerWidth = window.innerWidth;
+    let dx;
+    let dy;
     // How far the mouse or touch has been moved
-    const dx = e.touches[0].clientX - x;
-    const dy = e.touches[0].clientY - y;
+    if (isMobileCheck) {
+        // 모바일인 경우
+        dx = e.touches[0].clientX - x;
+        dy = e.touches[0].clientY - y;
+    } else {
+        dx = e.clientX - x;
+        dy = e.clientY - y;
+    }
     //모바일화면(768px이하)일때와 아닐 때 구분
     if (innerWidth > 768) {
         const newLeftWidth = (leftWidth + dx) * 100 / resizer[0].parentNode.getBoundingClientRect().width;
@@ -68,8 +77,14 @@ const mouseUpHandler = function () {
 // that's triggered when user drags the resizer
 const mouseDownHandler = function (e) {
     // Get the current touch positionS
-    x = e.touches[0].clientX;
-    y = e.touches[0].clientY;
+    if (isMobileCheck) {
+        //모바일 일때 
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+    } else {
+        x = e.clientX;
+        y = e.clientY;
+    }
     leftWidth = leftSide.getBoundingClientRect().width;
     topHeight = leftSide.getBoundingClientRect().height;
     /*console.error("클릭시너비",leftWidth);*/
@@ -85,6 +100,7 @@ resizer[0].addEventListener('mousedown', mouseDownHandler);
 resizer[0].addEventListener('touchstart', mouseDownHandler);
 //데스크탑,모바일 화면을 전환할때마다 각 조정 후 화면 크기  고정되는 문제로 매순간 마다 화면 초기화
 window.onresize = function (event) {
+    isMobileCheck = isMobile();
     var innerWidth = window.innerWidth;
     if (innerWidth > "768") {
         leftSide.style.height = "100%";
