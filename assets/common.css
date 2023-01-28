@@ -24,6 +24,9 @@ html, body {
     width: 100%;
     height: 100%;
 }
+.dropdownBtn{
+    display: none;
+}
 
 .wrapper #chat {
     width: 25%;
@@ -99,6 +102,12 @@ html, body {
     #player-form{
         margin-top: 2px;
         height: 10%;
+    }
+    .dropdownBtn{
+        display:none;
+        background-color: blue;
+        width: 100%;
+        height: 12px;
     }
 }
 ×

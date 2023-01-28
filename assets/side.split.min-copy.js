@@ -18,9 +18,9 @@ let topHeight = 0;
 //마우스 드래그시 작동
 const mouseMoveHandler = function (e) {
     let innerWidth = window.innerWidth;
-    // How far the mouse has been moved
-    const dx = e.clientX - x;
-    const dy = e.clientY - y;
+    // How far the mouse or touch has been moved
+    const dx = e.touches[0].clientX - x;
+    const dy = e.touches[0].clientY - y;
     //모바일화면(768px이하)일때와 아닐 때 구분
     if (innerWidth > 768) {
         const newLeftWidth = (leftWidth + dx) * 100 / resizer[0].parentNode.getBoundingClientRect().width;
@@ -59,23 +59,30 @@ const mouseUpHandler = function () {
     // Remove the handlers of `mousemove` and `mouseup`
     document.removeEventListener('mousemove', mouseMoveHandler);
     document.removeEventListener('mouseup', mouseUpHandler);
+    //모바일용 이벤트 리스너에서 핸들러 삭제
+    document.removeEventListener('touchmove', mouseMoveHandler);
+    document.removeEventListener('touchend', mouseUpHandler);
 };
 
 // Handle the 마우스클릭 event
 // that's triggered when user drags the resizer
 const mouseDownHandler = function (e) {
-    // Get the current mouse positionS
-    x = e.clientX;
-    y = e.clientY;
+    // Get the current touch positionS
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
     leftWidth = leftSide.getBoundingClientRect().width;
     topHeight = leftSide.getBoundingClientRect().height;
     /*console.error("클릭시너비",leftWidth);*/
     // Attach the listeners to `document`
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
+    //모바일용 이벤트 리스너 등록
+    document.addEventListener('touchmove', mouseMoveHandler);
+    document.addEventListener('touchend', mouseUpHandler);
 };
 // Attach the handler
 resizer[0].addEventListener('mousedown', mouseDownHandler);
+resizer[0].addEventListener('touchstart', mouseDownHandler);
 //데스크탑,모바일 화면을 전환할때마다 각 조정 후 화면 크기  고정되는 문제로 매순간 마다 화면 초기화
 window.onresize = function (event) {
     var innerWidth = window.innerWidth;
