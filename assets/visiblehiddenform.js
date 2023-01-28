@@ -3,8 +3,7 @@ const hiddenForm = document.getElementById("player-form");
 let videoArea = document.getElementById("player-container");
 dropdownBtn.addEventListener('click',
     function () {
-        console.log("click");
-        console.log(hiddenForm.style.display);
+
         //화면에 보이지 않는 상태면 보이게(가장 처음 시작시 빈값이 들어가서 그것도 같이 체크)
         if (hiddenForm.style.display === "" || hiddenForm.style.display === "none") {
             hiddenForm.style.display = "block";

@@ -76,14 +76,15 @@ html, body {
     .gutter.gutter-horizontal{
         width: 100%;
         height: 8px;
+        margin-top: 1px;
     }
     .wrapper #view{
         width: 100%;
-        height: 50%;
+        height: 55%;
     }
     .wrapper #chat{
         width: 100%;
-        height: 50%;
+        height: 45%;
     }
     .hp-body, 
     .player-section,
@@ -105,10 +106,11 @@ html, body {
     .dropdownBtn {
         display:block;
         margin: auto;
-        background-color: rgb(255, 230, 0);
+        background-color: rgba(244, 229, 237, 0.929);
         width: 100%;
-        height: 4%;
-        border: 0px;
+        height: 5%;
+        border: 1px;
+        z-index: 8;
     }
 }
 ×
