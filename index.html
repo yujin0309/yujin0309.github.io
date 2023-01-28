@@ -1090,9 +1090,19 @@
 				$('#player-form').submit(play);
 			});
 		</script>
+		<script>
+			var a = function () {
+				let uriInputForm = document.getElementById("player-form");
+				console.log(uriInputForm.style.display);
+				if (visualViewport.width > 768) {
+					if (uriInputForm.style.display === 'none') {
+						uriInputForm.style.display = 'block';
 
-
-
+					}
+				}
+			};
+			window.addEventListener('resize', a);
+		</script>
 		<iframe id="google_esf" name="google_esf" src="assets/zrt_lookup.html" style="display: none;"></iframe>
 	</div>
 

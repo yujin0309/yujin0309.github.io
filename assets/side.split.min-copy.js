@@ -6,7 +6,7 @@ const leftSide = resizer[0].previousElementSibling;
 const rightSide = resizer[0].nextElementSibling;
 
 let isMobileCheck = isMobile();
-console.log(isMobileCheck);
+
 
 // The current position of mouse
 let x = 0;
