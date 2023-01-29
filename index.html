@@ -1033,6 +1033,7 @@
 								src="blob:https://yujin0309.github.io/48c0fc9f-84a6-4d42-b052-d16deaf40367"></video>
 							<div id="player-tip" style="display: none;"></div>
 						</div>
+						<button type="button" class="dropdownBtn" name="hidden-formBtn">▾</button>
 						<form id="player-form">
 							<div class="input-group url-control" align="right">
 								<input type="text" class="form-control" id="player-src" value=""
@@ -1042,10 +1043,7 @@
 								</span>
 							</div>
 						</form>
-						<div class="checkbox"></div>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -1062,6 +1060,7 @@
 		<script src="assets/hls.js@latest"></script>
 		<script src="assets/main.js"></script>
 		<script src="assets\side.split.min-copy.js"></script>
+		<script src="assets\visiblehiddenform.js"></script>
 
 		<script>
 			var cb = function () {
@@ -1091,9 +1090,19 @@
 				$('#player-form').submit(play);
 			});
 		</script>
+		<script>
+			var a = function () {
+				let uriInputForm = document.getElementById("player-form");
+				console.log(uriInputForm.style.display);
+				if (visualViewport.width > 768) {
+					if (uriInputForm.style.display === 'none') {
+						uriInputForm.style.display = 'block';
 
-
-
+					}
+				}
+			};
+			window.addEventListener('resize', a);
+		</script>
 		<iframe id="google_esf" name="google_esf" src="assets/zrt_lookup.html" style="display: none;"></iframe>
 	</div>
 
