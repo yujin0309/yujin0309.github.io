@@ -48,10 +48,44 @@ function playKick(channel) {
   $('#player').replaceWith(iframeHtml);
 }
 
+function extractSoopChannel(input) {
+  var trimmed = (input || '').trim();
+  if (!trimmed) return null;
+
+  var match = trimmed.match(/^(?:https?:\/\/)?(?:www\.|play\.|m\.)?sooplive\.(?:com|co\.kr)\/([A-Za-z0-9_-]+)/i);
+  if (!match) return null;
+
+  var channel = match[1];
+  var reserved = ['live', 'category', 'categories', 'station', 'search', 'my', 'auth'];
+  if (reserved.indexOf(channel.toLowerCase()) !== -1) {
+    return null;
+  }
+  return channel;
+}
+
+function playSoop(channel) {
+  window.location.hash = 'type=soop&channel=' + encodeURIComponent(channel);
+  showPlayerTip('');
+
+  var embedUrl = 'https://play.sooplive.com/' + encodeURIComponent(channel) + '/embed';
+  var iframeHtml =
+    '<iframe id="player" src="' + embedUrl + '" ' +
+    'style="width: 100%; aspect-ratio: 16 / 9; min-height: 360px; border: 0;" ' +
+    'allow="autoplay; fullscreen" allowfullscreen="true"></iframe>';
+
+  $('#player').replaceWith(iframeHtml);
+}
+
 function playM3U8(src) {
   var kickChannel = extractKickChannel(src);
   if (kickChannel) {
     playKick(kickChannel);
+    return;
+  }
+
+  var soopChannel = extractSoopChannel(src);
+  if (soopChannel) {
+    playSoop(soopChannel);
     return;
   }
 
@@ -118,15 +152,22 @@ $(document).ready(function () {
     }, {});
 
     if (result.type === 'kick' && result.channel) {
-      var channel = decodeURIComponent(result.channel);
-      $('#player-src').val('https://kick.com/' + channel);
-      playKick(channel);
+      var kChannel = decodeURIComponent(result.channel);
+      $('#player-src').val('https://kick.com/' + kChannel);
+      playKick(kChannel);
+    } else if (result.type === 'soop' && result.channel) {
+      var sChannel = decodeURIComponent(result.channel);
+      $('#player-src').val('https://play.sooplive.com/' + sChannel);
+      playSoop(sChannel);
     } else if (result.src) {
       var src = decodeURIComponent(result.src);
       $('#player-src').val(src);
       var kickChannel = extractKickChannel(src);
+      var soopChannel = extractSoopChannel(src);
       if (kickChannel) {
         playKick(kickChannel);
+      } else if (soopChannel) {
+        playSoop(soopChannel);
       } else if (result.type === 'mp4') {
         playMP4(src);
       } else {
