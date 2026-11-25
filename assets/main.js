@@ -21,7 +21,40 @@ function showPlayerTip(msg) {
   $('#player-tip').text(msg).toggle(Boolean(msg));
 }
 
+function extractKickChannel(input) {
+  var trimmed = (input || '').trim();
+  if (!trimmed) return null;
+
+  var match = trimmed.match(/^(?:https?:\/\/)?(?:www\.|player\.)?kick\.com\/([A-Za-z0-9_-]+)/i);
+  if (!match) return null;
+
+  var channel = match[1];
+  if (['video', 'videos', 'category', 'categories'].indexOf(channel.toLowerCase()) !== -1) {
+    return null;
+  }
+  return channel;
+}
+
+function playKick(channel) {
+  window.location.hash = 'type=kick&channel=' + encodeURIComponent(channel);
+  showPlayerTip('');
+
+  var embedUrl = 'https://player.kick.com/' + encodeURIComponent(channel);
+  var iframeHtml =
+    '<iframe id="player" src="' + embedUrl + '" ' +
+    'style="width: 100%; aspect-ratio: 16 / 9; min-height: 360px; border: 0;" ' +
+    'allowfullscreen="true" scrolling="no"></iframe>';
+
+  $('#player').replaceWith(iframeHtml);
+}
+
 function playM3U8(src) {
+  var kickChannel = extractKickChannel(src);
+  if (kickChannel) {
+    playKick(kickChannel);
+    return;
+  }
+
   window.location.hash = 'type=m3u8&src=' + encodeURIComponent(src);
   showPlayerTip('');
   if (isMobile()) {
@@ -83,10 +116,18 @@ $(document).ready(function () {
       acc[parts[0]] = parts[1];
       return acc;
     }, {});
-    if (result.src) {
+
+    if (result.type === 'kick' && result.channel) {
+      var channel = decodeURIComponent(result.channel);
+      $('#player-src').val('https://kick.com/' + channel);
+      playKick(channel);
+    } else if (result.src) {
       var src = decodeURIComponent(result.src);
       $('#player-src').val(src);
-      if (result.type === 'mp4') {
+      var kickChannel = extractKickChannel(src);
+      if (kickChannel) {
+        playKick(kickChannel);
+      } else if (result.type === 'mp4') {
         playMP4(src);
       } else {
         playM3U8(src);
