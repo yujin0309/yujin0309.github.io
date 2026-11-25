@@ -1,49 +1,233 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta name="referrer" content="no-referrer">
+
+<title>롤 방송국</title>
+
+<meta name="keywords" content="m3u8 player, hls player, m3u8, hls">
+
+<meta name="description" content="Play M3U8/HLS streams in the browser.">
+
+<link rel="stylesheet" href="assets/font-awesome.min.css">
+
+<link rel="stylesheet" href="./assets/common.css">
+
+<link rel="stylesheet" href="./assets/reset.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.11/split.min.js"></script>
+
+<style>
+
+html {
+
+font-family: sans-serif;
+
+-webkit-text-size-adjust: 100%;
+
+}
+
+body {
+
+margin: 0;
+
+}
+
+#player-tip {
+
+margin-top: 8px;
+
+padding: 8px 12px;
+
+font-size: 13px;
+
+color: #b91c1c;
+
+background: #fef2f2;
+
+border-radius: 4px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div id="view">
+
+<div class="h10"></div>
+
+<div class="hp-body">
+
+<div class="player-section">
+
+<div class="container">
+
+<div id="player-container">
+
+<video id="player" style="width: 100%;" controls></video>
+
+<div id="player-tip" style="display: none;"></div>
+
+</div>
+
+<button type="button" class="dropdownBtn" name="hidden-formBtn">▾</button>
+
+<form id="player-form">
+
+<div class="input-group url-control" align="right">
+
+<input type="text" class="form-control" id="player-src" value=""
+
+placeholder="http://www.example.com/live/playlist.m3u8" required>
+
+<span class="input-group-btn">
+
+<button type="submit" class="btn btn-success" id="player-start">Play</button>
+
+</span>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="gutter gutter-horizontal"></div>
+
+
+
+<div id="chat">
+
+<script async src="//client.uchat.io/uchat.js"></script>
+
+<u-chat room="030901yu" style="width: 100%; height: 100%;"></u-chat>
+
+</div>
+
+
+
+<script src="assets/jquery.min.js"></script>
+
+<script src="assets/bootstrap.min.js"></script>
+
+<script src="assets/swfobject.min.js"></script>
+
+<script src="assets/hls.js@latest"></script>
+
+<script src="assets/main.js"></script>
+
+<script src="assets/side.split.min-copy.js"></script>
+
+<script src="assets/visiblehiddenform.js"></script>
+
+
+
 <script>
-			function showTip(msg) {
-				var tip = document.getElementById('player-tip');
-				if (!tip) return;
-				tip.textContent = msg;
-				tip.style.display = msg ? 'block' : 'none';
-			}
 
-			function play() {
-				var src = $('#player-src').val().trim();
-				showTip('');
-				if (!src) return false;
+function showTip(msg) {
 
-				if (typeof extractKickChannel === 'function' && typeof playKick === 'function') {
-					var kickChannel = extractKickChannel(src);
-					if (kickChannel) {
-						playKick(kickChannel);
-						return false;
-					}
-				}
+var tip = document.getElementById('player-tip');
 
-				if (typeof playM3U8 === 'function') {
-					playM3U8(src);
-				} else if (window.Hls && Hls.isSupported()) {
-					var video = document.getElementById('player');
-					var hls = new Hls();
-					hls.loadSource(src);
-					hls.attachMedia(video);
-					hls.on(Hls.Events.ERROR, function (_, data) {
-						if (data && data.fatal) {
-							var code = data.response && data.response.code ? ' (HTTP ' + data.response.code + ')' : '';
-							showTip('스트림 재생 실패' + code + ': 서버 접근 제한(CORS/403) 또는 지원되지 않는 스트림일 수 있습니다.');
-						}
-					});
-				}
-				return false;
-			}
+if (!tip) return;
 
-			$(document).ready(function () {
-				$('#player-form').submit(play);
-			});
+tip.textContent = msg;
 
-			window.addEventListener('resize', function () {
-				var uriInputForm = document.getElementById('player-form');
-				if (uriInputForm && window.innerWidth > 768 && uriInputForm.style.display === 'none') {
-					uriInputForm.style.display = 'block';
-				}
-			});
-		</script>
+tip.style.display = msg ? 'block' : 'none';
+
+}
+
+
+
+function play() {
+
+var src = $('#player-src').val().trim();
+
+showTip('');
+
+if (!src) return false;
+
+
+
+if (typeof playM3U8 === 'function') {
+
+playM3U8(src);
+
+} else if (window.Hls && Hls.isSupported()) {
+
+var video = document.getElementById('player');
+
+var hls = new Hls();
+
+hls.loadSource(src);
+
+hls.attachMedia(video);
+
+hls.on(Hls.Events.ERROR, function (_, data) {
+
+if (data && data.fatal) {
+
+var code = data.response && data.response.code ? ' (HTTP ' + data.response.code + ')' : '';
+
+showTip('스트림 재생 실패' + code + ': 서버 접근 제한(CORS/403) 또는 지원되지 않는 스트림일 수 있습니다.');
+
+}
+
+});
+
+}
+
+return false;
+
+}
+
+
+
+$(document).ready(function () {
+
+$('#player-form').submit(play);
+
+});
+
+
+
+window.addEventListener('resize', function () {
+
+var uriInputForm = document.getElementById('player-form');
+
+if (uriInputForm && window.innerWidth > 768 && uriInputForm.style.display === 'none') {
+
+uriInputForm.style.display = 'block';
+
+}
+
+});
+
+</script>
+
+</div>
+
+</body>
+
+</html>
